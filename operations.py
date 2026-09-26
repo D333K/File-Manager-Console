@@ -11,7 +11,7 @@ def load_extensions() -> list:
 
     extension_dir_path = os.path.dirname(__file__)
 
-    extension_json_path = os.path.join(extension_dir_path, "extension.json")
+    extension_json_path = os.path.join(extension_dir_path, ".extension.json")
 
     try:
         with open(extension_json_path, 'r', encoding="utf-8") as extension_file:
@@ -39,9 +39,14 @@ def help_user() -> bool:
 
     elif answer == 'y':
         extensions = load_extensions()
+        
+        os.system("cls" if os.name == "nt" else "clear")
+        print('-' * 33)
+        print("Choose From This List Next Time:-")
+        print('-' * 33)
 
         for index, extension in enumerate(extensions):
-            print(f"{index + 1} - {extension}")
+            print(f"{str(index + 1).zfill(3)} - {extension}")
         
         print('-' * 20)
         input("Press To Continue...")
@@ -155,7 +160,7 @@ def create_file() -> None:
     extension_type = load_extensions()
 
     print('-' * 12)
-    extension = input("Choose One From This List: ").strip()
+    extension = input("Enter extension type: ").strip().lower()
 
     if not extension:
         print("Extension Can't Be Empty.")
@@ -285,7 +290,17 @@ def delete_f() -> None:
         return
 
     if os.path.isfile(f_name):
-        os.remove(os.path.join(os.getcwd(), f_name))
+        answer = input("Are You Sure To Delete This File? [y/n]: ").strip().lower()
+        
+        if answer == 'y':
+            os.remove(os.path.join(os.getcwd(), f_name))
+
+        elif answer == 'n':
+            print()
+            print('-' * 25)
+            input("Press To Continue...")
+
+            return
 
     elif os.path.isdir(f_name):
         answer = input("Are You Sure To Delete This Folder? [y/n]: ").strip().lower()
